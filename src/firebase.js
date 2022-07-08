@@ -1,7 +1,6 @@
-
 import { initializeApp } from "firebase/app";
-import {getAuth} from 'firebase/auth';
-
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -10,12 +9,13 @@ const firebaseConfig = {
   projectId: "react-firebase-86cae",
   storageBucket: "react-firebase-86cae.appspot.com",
   messagingSenderId: "977762991649",
-  appId: "1:977762991649:web:ad74fd43b55de26cda6d60"
+  appId: "1:977762991649:web:ad74fd43b55de26cda6d60",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-const auth = getAuth(app)
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-export {auth};
+export { auth, db };

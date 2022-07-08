@@ -12,7 +12,8 @@ const Register = () => {
   const { required, patternEmail, minLength, validateTrim, validateSamePass } =
     formValidate();
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -24,11 +25,13 @@ const Register = () => {
   const onSubmit = async ({ email, password }) => {
     try {
       await registerUser(email, password);
-      navigate("/login");
+      navigate("/login", )
     } catch (error) {
       console.log(error.code);
-      setError("firebase", {
-        message: firebaseErrors(error.code),
+      const { code, message } = firebaseErrors(error.code);
+
+      setError(code, {
+        message: message,
       });
     }
   };
@@ -45,8 +48,6 @@ const Register = () => {
             className="flex flex-col w-4/6 gap-5 mx-auto"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <FormErrors error={errors.firebase} />
-
             <FormInput
               className="p-2 border-2 rounded-xl border-slate-700"
               type="email"
@@ -77,7 +78,7 @@ const Register = () => {
               placeholder="Confirme la contraseña"
               className="p-2 border-2 rounded-xl border-slate-700"
               {...register("passwordConfirm", {
-                validate: validateSamePass(getValues),
+                validate: validateSamePass(getValues("password")),
               })}
             />
 

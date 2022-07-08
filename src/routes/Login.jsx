@@ -26,8 +26,11 @@ const Login = () => {
       navigate("/");
     } catch (error) {
       console.log(error.code);
-      setError("firebase", {
-        message: firebaseErrors(error.code),
+
+      const { code, message } = firebaseErrors(error.code);
+
+      setError(code, {
+        message: message,
       });
     }
   };
@@ -48,8 +51,6 @@ const Login = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col w-4/6 gap-5 mx-auto"
           >
-            <FormErrors error={errors.firebase} />
-
             <FormInput
               type="email"
               placeholder="Ingrese email"
