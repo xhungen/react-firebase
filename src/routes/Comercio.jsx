@@ -20,8 +20,12 @@ const Comercio = () => {
 
   useEffect(() => {
     getProductos(params.id);
+    console.log("Datos obteniendo")
   }, []);
 
+
+  const loadingData = loading.getProductos && <p>Loading data..</p>;
+  const errorData = error && <p>{error}</p>;
  
 
   const obj = {};
@@ -70,9 +74,11 @@ const Comercio = () => {
                 </p>
 
                 <div className="flex gap-4">
-                  <button className="px-2 py-1 bg-yellow-500 rounded-full ">
+
+                  <Link to={`/editar-producto/${params.id}/${producto.id}`} className="px-2 py-1 bg-yellow-500 rounded-full " 
+                  >
                     Editar
-                  </button>
+                  </Link>
                   <button 
                   onClick={() => deleteProducto(params.id,producto.id)}
                   className="px-2 py-1 bg-red-500 rounded-full ">

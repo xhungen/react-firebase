@@ -11,6 +11,7 @@ import NotFound from "./routes/NotFound";
 import AddComercio from "./routes/AddComercio";
 import Comercio from "./routes/Comercio";
 import AddProductos from "./routes/AddProductos";
+import UpdateProduct from "./routes/UpdateProduct";
 
 function App() {
   const { user } = useContext(UserContext);
@@ -29,7 +30,8 @@ function App() {
           <Route path="perfil" element={<Profile />} />
           <Route path="agregar-comercio" element={<AddComercio />} />
           <Route path="comercio/:id" element={<Comercio />} />
-          <Route path="agregar-producto/:id" element={<AddProductos />} />
+          <Route path="agregar-producto/:id" element={<AddProductos  />} />
+          <Route path="editar-producto/:id/:idProducto" element={<UpdateProduct  />} />
         </Route>
         //RUTAS PUBLICAS
         <Route path="/login" element={<Login />} />
