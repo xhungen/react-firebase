@@ -15,26 +15,82 @@ const Comercio = () => {
     addCategoria,
     addProducto,
     getProductos,
+    deleteProducto
   ] = useFirestore();
 
   useEffect(() => {
     getProductos(params.id);
   }, []);
 
+ 
+
+  const obj = {};
+
+  data.map((item) => {
+    {
+      if (item.productos.length > 0) {
+        item.productos.forEach((producto) => {
+          const { categoria } = producto;
+          obj[categoria] = obj[categoria]
+            ? [...obj[categoria], producto]
+            : [producto];
+        });
+      } else {
+        return null;
+      }
+    }
+  });
+
+  
+
   return (
-    <div className="flex flex-col items-center justify-center mt-16 text-white">
+    <div className="flex flex-col justify-center mt-16 text-white itemsP-center">
+      <h1 className="my-5 text-2xl font-semibold text-center">Productos</h1>
       {data.map((item) => (
         <div key={item.id}>
-          <h1>{item.nombre}</h1>
-          <p>{item.direccion}</p>
-          <h1 className="my-5 font-semibold">Productos</h1>
-         
+          <h1 className="text-center">{item.nombre}</h1>
         </div>
       ))}
 
       <div>
-        <Link to={`/agregar-producto/${params.id}`}>Agregar Producto</Link>
+        {Object.keys(obj).map((key) => (
+          <div className="flex flex-col gap-5 p-5 " key={key}>
+            <h1 className="font-semibold text-center uppercase">{key}</h1>
+            {obj[key].map((producto, index) => (
+              <div className="flex flex-col gap-2 p-3 bg-slate-800 rounded-xl " key={index}>
+                <h1 className="font-semibold">
+                  Nombre: <span className="font-normal">{producto.nombre}</span>
+                </h1>
+                <p className="font-semibold">
+                  Precio: <span className="font-normal">{producto.precio}</span>
+                </p>
+                <p className="font-semibold">
+                  Descripcion: 
+                  <span className="font-normal"> {producto.descripcion}</span>
+                </p>
+
+                <div className="flex gap-4">
+                  <button className="px-2 py-1 bg-yellow-500 rounded-full ">
+                    Editar
+                  </button>
+                  <button 
+                  onClick={() => deleteProducto(params.id,producto.id)}
+                  className="px-2 py-1 bg-red-500 rounded-full ">
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
+
+      <Link
+        className="p-2 mx-auto mt-20 text-center text-white w-60 bg-slate-700 rounded-xl"
+        to={`/agregar-producto/${params.id}`}
+      >
+        Agregar Producto
+      </Link>
     </div>
   );
 };

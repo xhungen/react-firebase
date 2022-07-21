@@ -17,7 +17,7 @@ const Home = () => {
     <>
       <div className="flex flex-col items-center justify-center mt-24">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Home</h1>
+          <h1 className="text-2xl font-semibold text-center text-white mb-11">Home</h1>
 
           {loadingData}
           {errorData}
@@ -26,7 +26,7 @@ const Home = () => {
 
             {data.map((comercios) => (
               <div key={comercios.id}>
-                <Link to={`/comercio/${comercios.id}/`} className="text-2xl font-semibold text-white">
+                <Link to={`/comercio/${comercios.id}/`} className="text-xl text-white underline">
                   {comercios.nombre}
                 </Link>
 
@@ -35,7 +35,7 @@ const Home = () => {
             ))}
           </div>
 
-          <div className="p-2 mt-20 text-white bg-slate-700 rounded-xl" >
+          <div className="p-2 mt-20 text-center text-white bg-slate-700 rounded-xl" >
             <Link to="/agregar-comercio">Agregar Comercio</Link>
           </div>
         </div>

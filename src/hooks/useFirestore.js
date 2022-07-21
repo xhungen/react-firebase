@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { db, auth } from "../firebase";
 import {
   getDocs,
@@ -11,6 +11,9 @@ import {
   updateDoc,
   arrayUnion,
   collectionGroup,
+  deleteField,
+  FieldValue,
+  arrayRemove,
 } from "firebase/firestore";
 import { nanoid } from "nanoid";
 
@@ -74,10 +77,10 @@ export const useFirestore = () => {
   };
 
   //TRAE UNA LA LISTA DE PRODUCTOS DE UN RESTAURANTE
-  const getProductos = async(id)=>{
+  const getProductos = async (id) => {
     setLoading(true);
     try {
-      const dataRef = collection(db, "menus");
+      const dataRef = collection(db, "comercios");
       const q = query(dataRef, where("id", "==", id));
       const querySnapshot = await getDocs(q);
       const dataDB = querySnapshot.docs.map((doc) => {
@@ -96,7 +99,7 @@ export const useFirestore = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   //AGREGA UN COMERCIO
   const addData = async (store) => {
@@ -106,6 +109,8 @@ export const useFirestore = () => {
         id: nanoid(6),
         nombre: store.nombre,
         direccion: store.direccion,
+        productos: [],
+        categorias: [],
       };
 
       const docRef = doc(db, "comercios", newDoc.id);
@@ -125,13 +130,15 @@ export const useFirestore = () => {
     setLoading(true);
     try {
       const newCategoria = {
-        id: id,
-        productos: [],
+        nombre: categoria,
+        id: nanoid(6),
       };
 
-      const dataRef = doc(db, "menus", newCategoria.id);
+      const dataRef = doc(db, "comercios", id);
 
-      await setDoc(dataRef, newCategoria);
+      await updateDoc(dataRef, {
+        categorias: arrayUnion(newCategoria),
+      });
     } catch (error) {
       console.log(error);
       setError(error.message);
@@ -144,17 +151,45 @@ export const useFirestore = () => {
     setLoading(true);
     try {
       const newProducto = {
+        id: nanoid(6),
         nombre: producto.nombre,
         precio: producto.precio,
         descripcion: producto.descripcion,
         categoria: producto.categoria,
       };
 
-      const dataRef = doc(db, "menus", id);
+      const dataRef = doc(db, "comercios", id);
 
       await updateDoc(dataRef, {
         productos: arrayUnion(newProducto),
       });
+    } catch (error) {
+      console.log(error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteProducto = async (id, idProducto) => {
+    setLoading(true);
+    try {
+      const dataRef = doc(db, "comercios", id);
+
+      const productos = data.find((item) => item.id === id).productos;
+
+      const producto = productos.find((item) => item.id === idProducto);
+
+      await updateDoc(dataRef, {
+        productos: arrayRemove(producto),
+      });
+
+
+     
+
+
+     
+
     } catch (error) {
       console.log(error);
       setError(error.message);
@@ -172,6 +207,7 @@ export const useFirestore = () => {
     searchData,
     addCategoria,
     addProducto,
-    getProductos
+    getProductos,
+    deleteProducto,
   ];
 };
